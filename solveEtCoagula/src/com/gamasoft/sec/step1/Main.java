@@ -1,4 +1,4 @@
-package com.gamasoft.sec.before;
+package com.gamasoft.sec.step1;
 
 public class Main {
     public static void main(String[] args){
@@ -6,8 +6,7 @@ public class Main {
         Client c = new Client("Mr", "James Bond", a);
 
         Printer p = new Printer("usb");
-        Label label = new Label(p, a);
-        p.printLabel(c, label);
+        Functions.printLabel(c, p);
     }
 }
 
