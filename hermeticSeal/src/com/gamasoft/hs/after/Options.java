@@ -1,4 +1,5 @@
-package com.gamasoft.hs.before;
+package com.gamasoft.hs.after;
+
 
 public class Options {
     public double calculate(Portfolio portfolio) {

@@ -1,36 +1,30 @@
-package com.gamasoft.hs.before;
+package com.gamasoft.hs.after;
 
 import java.util.List;
 
 public class Main {
 
-    private ConnectionHelper connHelper;
-    private ConfigHelper configHelper;
+    private DataContextBuilder newModule;
 
     public Response execute(String client, String market, List<Integer> trades, ConnectionPool conns){
-
-        Connection conn = connHelper.connect(client, conns);
-
-        Context context = conn.fetchContext(market);
-
         Portfolio pf = new Portfolio(client, trades);
 
-        Options opts = configHelper.getOptions(client, context);
+        DataContext dc = newModule.createDataContext(conns, market);
 
-        CalcResult res = runCalculations(pf, conn, opts, context);
+        CalcResult r = runCalculations(pf, dc);
 
-        return new Response(context, res);
+        return new Response(dc.getContext(), r);
 
     }
 
-    private CalcResult runCalculations(Portfolio portfolio, Connection conn, Options opts, Context context) {
+    private CalcResult runCalculations(Portfolio portfolio, DataContext dc) {
         //some very complex calculations
 
-        Portfolio newPortfolio = context.applyTranform(conn, portfolio);
+        Portfolio newPortfolio = dc.applyTranform(portfolio);
 
         //others very complex calculations
 
-        double x = opts.calculate(newPortfolio);
+        double x = dc.calculate(newPortfolio);
 
         return CalcResult.success(x);
     }
@@ -42,6 +36,27 @@ public class Main {
 
 
 /*
+interface Facade(){
+        Connection getDs();
+        Options getOptions();
+        Context getContext();
+        }
+
+
+
+private newModule;
+
+public ExplainResults execute(clientId, market, trades, connections){
+
+        Facade facade = otherModule.createFacade(cal, context, market);
+
+        Portfolio cal = new Portfolio(clientId, trades);
+
+        ResultHolder resultsHolder = Calc.runCalculations(cal, facade.getDs(), facade.getOptions(), facade.getContext());
+
+        return new ExplainResults(market, resultsHolder.result, resultsHolder.errors);
+
+        }
 
 
         looking inside Calc.runCalculations:

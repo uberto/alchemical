@@ -18,11 +18,15 @@ public class Main {
     }
 
     private CalcResult runCalculations(Portfolio portfolio, Connection conn, Options opts, Context context) {
-        //very complex calculation
+        //some very complex calculations
 
-        Portfolio newportfolio = context.applyTranform(conn, portfolio);
+        Portfolio newPortfolio = context.applyTranform(conn, portfolio);
 
-        return CalcResult.success(123.45);
+        //others very complex calculations
+
+        double x = opts.calculate(newPortfolio);
+
+        return CalcResult.success(x);
     }
 
     public static void main(String[] args){

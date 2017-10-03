@@ -1,7 +1,7 @@
 package com.gamasoft.hs.before;
 
 public class ConfigHelper {
-    public Options getOptions(Portfolio cal, Context context) {
+    public Options getOptions(String client, Context context) {
         return new Options();
     }
 }
