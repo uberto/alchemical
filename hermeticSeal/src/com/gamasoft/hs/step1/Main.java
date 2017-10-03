@@ -1,25 +1,19 @@
-package com.gamasoft.hs.before;
+package com.gamasoft.hs.step1;
 
 import java.util.List;
 
 public class Main {
 
-    private ConnectionHelper connHelper;
-    private ConfigHelper configHelper;
+    private DataContextBuilder newModule;
 
     public Response execute(String client, String market, List<Integer> trades, ConnectionPool conns){
-
-        Connection conn = connHelper.connect(client, conns);
-
-        Context context = conn.fetchContext(market);
-
         Portfolio pf = new Portfolio(client, trades);
 
-        Options opts = configHelper.getOptions(pf, context);
+        DataContext dc = newModule.createDataContext(conns, market);
 
-        CalcResult res = runCalculations(pf, conn, opts, context);
+        CalcResult r = runCalculations(pf, dc.getConnection(), dc.getOptions(), dc.getContext());
 
-        return new Response(context, res);
+        return new Response(dc.getContext(), r);
 
     }
 
