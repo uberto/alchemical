@@ -6,10 +6,10 @@ public class Main {
 
     private DataContextBuilder newModule;
 
-    public Response execute(String client, String market, List<Integer> trades, ConnectionPool conns){
+    public Response execute(String client, String market, List<Integer> trades){
         Portfolio pf = new Portfolio(client, trades);
 
-        DataContext dc = newModule.createDataContext(conns, market);
+        DataContext dc = newModule.createDataContext(market);
 
         CalcResult r = runCalculations(pf, dc);
 

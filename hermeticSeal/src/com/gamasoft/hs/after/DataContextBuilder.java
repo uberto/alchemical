@@ -2,16 +2,17 @@ package com.gamasoft.hs.after;
 
 public class DataContextBuilder {
 
-    private ConfigHelper configHelper;
+    private ConfigHelper configHelper; // <- injected
+    private ConnectionPool connPool; // <- injected
 
-    public DataContext createDataContext(ConnectionPool aConnPool, String aMarket) {
+    public DataContext createDataContext(String aMarket) {
         return new DataContext() {
-            ConnectionPool connPool = aConnPool;
             String market = aMarket;
+            Context context = null;
 
             @Override
-            public Connection getConnection() {
-                return connPool.borrowConnection();
+            public Portfolio applyTranform(Portfolio portfolio) {
+                return connPool.withConnection(c -> getContext().applyTranform(c, portfolio));
             }
 
             @Override
@@ -21,7 +22,9 @@ public class DataContextBuilder {
 
             @Override
             public Context getContext() {
-                return connPool.borrowConnection().fetchContext(market);
+                if (context == null)
+                    context = connPool.withConnection(c -> c.fetchContext(market));
+                return context;
             }
         };
     }
