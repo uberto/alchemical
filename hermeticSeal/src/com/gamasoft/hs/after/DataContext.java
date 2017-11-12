@@ -1,10 +1,9 @@
 package com.gamasoft.hs.after;
 
+import java.util.function.Consumer;
+
 public interface DataContext {
-
-    Portfolio applyTranform(Portfolio portfolio);
-
-    double calculate(Portfolio portfolio);
-    Context getContext();
-
+    void withConnection(Consumer<Connection> action);
+    String getRisk();
+    MarketData getMarketData();
 }

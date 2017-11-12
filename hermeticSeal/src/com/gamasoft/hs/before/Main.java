@@ -11,26 +11,28 @@ public class Main {
 
         Connection conn = connHelper.connect(client, conns);
 
-        Context context = conn.fetchContext(market);
+        MarketData marketData = conn.fetchMarketData(market);
 
         Portfolio pf = new Portfolio(client, trades);
 
-        Options opts = configHelper.getOptions(client, context);
+        ConfigManager riskConf = configHelper.getRiskConfig(client, market);
 
-        CalcResult res = runCalculations(pf, conn, opts, context);
+        CalcResult res = runCalculations(pf, conn, riskConf, marketData);
 
-        return new Response(context, res);
+        return new Response(marketData, res);
 
     }
 
-    private CalcResult runCalculations(Portfolio portfolio, Connection conn, Options opts, Context context) {
-        //some very complex calculations
+    private CalcResult runCalculations(Portfolio portfolio, Connection conn, ConfigManager configMan, MarketData md) {
 
-        Portfolio newPortfolio = context.applyTranform(conn, portfolio);
+        String riskConf = configMan.get("risk");
+        RiskEngine risk = new RiskEngine(riskConf);
+
+        //some very complex calculations
+        portfolio.enrichWithMD(md, conn);
 
         //others very complex calculations
-
-        double x = opts.calculate(newPortfolio);
+        double x = risk.calculate(portfolio);
 
         return CalcResult.success(x);
     }
@@ -40,40 +42,3 @@ public class Main {
     }
 }
 
-
-/*
-
-
-        looking inside Calc.runCalculations:
-
-        ...
-        newPortfolio = context.applyTranform(ds, portfolio);
-        ...
-
-
-        let's modify the interface
-
-interface Facade(){
-        Options getOptions();
-        Portfolio applyTranform(portfolio);
-        }
-
-
-
-        new code:
-
-private newModule;
-
-public ExplainResults execute(clientId, market, trades, connections){
-
-        DataFacade facade = otherModule.createFacade(cal, context, market);
-
-        Portfolio cal = new Portfolio(clientId, trades);
-
-        ResultHolder resultsHolder = Calc.runCalculations(cal, facade);
-
-        return new ExplainResults(market, resultsHolder.result, resultsHolder.errors);
-
-        }
-
-        */

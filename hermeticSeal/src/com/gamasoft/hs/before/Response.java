@@ -2,12 +2,12 @@ package com.gamasoft.hs.before;
 
 public class Response {
 
-    public final Context context;
+    public final MarketData marketData;
     public final CalcResult result;
 
-    public Response(Context context, CalcResult result) {
+    public Response(MarketData marketData, CalcResult result) {
 
-        this.context = context;
+        this.marketData = marketData;
         this.result = result;
     }
 }

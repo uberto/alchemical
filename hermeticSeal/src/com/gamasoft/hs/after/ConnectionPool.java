@@ -1,5 +1,6 @@
 package com.gamasoft.hs.after;
 
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 public class ConnectionPool {
@@ -7,11 +8,11 @@ public class ConnectionPool {
         return new Connection();
     }
 
-    public <T> T withConnection(Function<Connection, T> f) {
+
+    public void withConnection(Consumer<Connection> action) {
         Connection c = borrowConnection();
-        T res = f.apply(c);
+        action.accept(c);
         returnConnection(c);
-        return res;
     }
 
     private void returnConnection(Connection c) {

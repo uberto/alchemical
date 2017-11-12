@@ -1,31 +1,34 @@
 package com.gamasoft.hs.after;
 
+import java.util.function.Consumer;
+
 public class DataContextBuilder {
 
-    private ConfigHelper configHelper; // <- injected
     private ConnectionPool connPool; // <- injected
 
-    public DataContext createDataContext(String aMarket) {
+    public DataContext createDataContext(String aMarket, String aClient) {
         return new DataContext() {
+
             String market = aMarket;
-            Context context = null;
+            String client = aClient;
 
             @Override
-            public Portfolio applyTranform(Portfolio portfolio) {
-                return connPool.withConnection(c -> getContext().applyTranform(c, portfolio));
+            public void withConnection(Consumer<Connection> action) {
+                connPool.withConnection(action);
             }
 
             @Override
-            public double calculate(Portfolio portfolio) {
-                return configHelper.getOptions(portfolio.clientId, getContext()).calculate(portfolio);
+            public String getRisk() {
+                ConfigManager configManager = new ConfigManager(client + "_ " + market + ".yaml");
+                return configManager.get("risk");
             }
 
             @Override
-            public Context getContext() {
-                if (context == null)
-                    context = connPool.withConnection(c -> c.fetchContext(market));
-                return context;
+            public MarketData getMarketData() {
+                return connPool.borrowConnection().fetchMarketData(market);
             }
+
+
         };
     }
 }
