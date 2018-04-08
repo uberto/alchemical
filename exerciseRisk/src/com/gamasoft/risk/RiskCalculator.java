@@ -1,0 +1,77 @@
+package com.gamasoft.risk;
+
+import com.gamasoft.commons.*;
+import com.gamasoft.markets.Portfolio;
+import com.gamasoft.markets.StockExchange;
+import com.gamasoft.markets.Trade;
+
+import java.util.List;
+import java.util.Map;
+
+public class RiskCalculator {
+    private ConnectionHelper connHelper = new ConnectionHelper();
+    private ConfigHelper configHelper;
+
+    public RiskCalculator() {
+        this.configHelper = ConfigHelper.readFromResources();
+    }
+
+
+    private Response executeRiscCalc(String client, String market, List<Trade> trades){
+
+        Connection conn = connHelper.connect(client, ConnectionPool.getInstance());
+
+        StockExchange stockExchange = conn.fetchExchangeData(market);
+
+        Portfolio pf = new Portfolio(client, trades);
+
+        ConfigManager riskConf = configHelper.getRiskConfig(client, market);
+
+        CalcResult res = runCalculations(pf, conn, riskConf, stockExchange);
+
+        return new Response(stockExchange, res);
+
+    }
+
+    private CalcResult runCalculations(Portfolio portfolio, Connection conn, ConfigManager configMan, StockExchange md) {
+
+        Map<String, Double> riskParams = configMan.get("risk");
+        RiskConf riskConf = new RiskConf( riskParams.get("vol"), riskParams.get("bump"));
+        RiskEngine risk = new RiskEngine(riskConf);
+
+        //some very complex calculations
+        portfolio.enrichWithMD(md, conn);
+
+        //others very complex calculations
+        double x = risk.calculate(portfolio);
+
+        return CalcResult.success(x);
+    }
+
+    public Response calculateValueAtRisk(String clientName, String market) {
+        List<Trade> trades = ConnectionPool.getInstance().borrowConnection().fetchTrades();
+
+        return executeRiscCalc(clientName, market, trades);
+    }
+
+
+
+    public double calculatePresentValue(String clientName, String market) {
+        List<Trade> trades = ConnectionPool.getInstance().borrowConnection().fetchTrades();
+
+        Connection conn = connHelper.connect(clientName, ConnectionPool.getInstance());
+
+        StockExchange stockExchange = conn.fetchExchangeData(market);
+
+        Portfolio portfolio = new Portfolio(clientName, trades);
+
+        portfolio.enrichWithMD(stockExchange, conn);
+
+        RiskConf priceConf = new RiskConf(1, 0);
+        RiskEngine risk = new RiskEngine(priceConf);
+
+        return risk.calculate(portfolio);
+
+
+    }
+}

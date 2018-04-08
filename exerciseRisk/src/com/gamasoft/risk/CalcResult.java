@@ -1,4 +1,4 @@
-package com.gamasoft;
+package com.gamasoft.risk;
 
 public class CalcResult {
     public final double risk;
