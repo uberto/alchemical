@@ -5,7 +5,6 @@ import com.gamasoft.markets.Portfolio;
 import java.util.ArrayList;
 import java.util.List;
 
-//adrress
 public class ClientData {
     private final String clientId;
     private final Portfolio portfolio;

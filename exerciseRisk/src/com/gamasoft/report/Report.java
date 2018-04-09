@@ -6,9 +6,7 @@ import com.sun.deploy.util.ArrayUtil;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Stream;
 
-//label
 public class Report {
     private RiskData riskData;
     private Printer printer;

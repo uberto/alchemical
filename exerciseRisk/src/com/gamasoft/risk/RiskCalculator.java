@@ -48,16 +48,19 @@ public class RiskCalculator {
 
 
     public Portfolio getPortfolio(String clientName) {
-        List<Trade> trades = ConnectionPool.getInstance().borrowConnection().fetchTrades();
+        Connection conn = connHelper.connect(clientName, ConnectionPool.getInstance());
+
+        List<Trade> trades =conn.fetchTrades();
 
         return new Portfolio(clientName, trades);
     }
 
 
     public double calculatePresentValue(String clientName, String market) {
-        List<Trade> trades = ConnectionPool.getInstance().borrowConnection().fetchTrades();
 
         Connection conn = connHelper.connect(clientName, ConnectionPool.getInstance());
+
+        List<Trade> trades = conn.fetchTrades();
 
         StockExchange stockExchange = conn.fetchExchangeData(market);
 

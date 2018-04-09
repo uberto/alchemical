@@ -2,7 +2,6 @@ package com.gamasoft.report;
 
 import com.gamasoft.risk.RiskResponse;
 
-//clent
 public class RiskData {
     public ClientData clientData;
     public RiskResponse riskResponse;
