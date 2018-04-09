@@ -14,14 +14,14 @@ public class Main {
     public static void main(String[] args){
 
         ConnectionPool.getInstance().open("dbConn");
-        Printer printer = new Printer("mainPrinter");
+        Printer printer = new Printer("mainPrinter", System.out);
 
         produceReport("Bud Fox", "LDN", printer);
         produceReport("Gordon Gekko", "NY", printer);
 
     }
 
-    private static void produceReport(String client, String market, Printer printer) {
+    public static void produceReport(String client, String market, Printer printer) {
         RiskCalculator calc = new RiskCalculator();
         Portfolio pf = calc.getPortfolio(client);
         RiskResponse r = calc.calculateValueAtRisk(client, market, pf);
