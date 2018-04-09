@@ -11,7 +11,7 @@ public class ConfigHelper {
     }
 
     public ConfigManager getRiskConfig(String client, String stockExchange) {
-        Utils.notBlank(client, "client");
+        Utils.notBlank(client, "riskData");
         Utils.notBlank(stockExchange, "stockExchange");
 
         return new ConfigManager(client + "_ " + stockExchange + ".yaml");

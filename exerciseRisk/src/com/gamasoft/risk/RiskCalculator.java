@@ -17,19 +17,17 @@ public class RiskCalculator {
     }
 
 
-    private Response executeRiscCalc(String client, String market, List<Trade> trades){
+    public RiskResponse calculateValueAtRisk(String client, String market, Portfolio pf){
 
         Connection conn = connHelper.connect(client, ConnectionPool.getInstance());
 
         StockExchange stockExchange = conn.fetchExchangeData(market);
 
-        Portfolio pf = new Portfolio(client, trades);
-
         ConfigManager riskConf = configHelper.getRiskConfig(client, market);
 
         CalcResult res = runCalculations(pf, conn, riskConf, stockExchange);
 
-        return new Response(stockExchange, res);
+        return new RiskResponse(stockExchange, res);
 
     }
 
@@ -48,12 +46,12 @@ public class RiskCalculator {
         return CalcResult.success(x);
     }
 
-    public Response calculateValueAtRisk(String clientName, String market) {
+
+    public Portfolio getPortfolio(String clientName) {
         List<Trade> trades = ConnectionPool.getInstance().borrowConnection().fetchTrades();
 
-        return executeRiscCalc(clientName, market, trades);
+        return new Portfolio(clientName, trades);
     }
-
 
 
     public double calculatePresentValue(String clientName, String market) {
