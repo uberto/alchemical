@@ -1,0 +1,14 @@
+Alchemical Code Rejuvenation
+
+The goal of this exercise is to simulate working on a big legacy codebase.
+We want to separate *risk* and *report* packages from common and markets, so that we can test them in insulation.
+You are not allowed to change anything in common and markets packages (because others are depending on those).
+
+The strategy will be:
+0) add a couple of EndToEnd test
+1) remove direct use of singletons from common
+2) introduce an interface to clearly separate risk from common
+3) clean up class design inside risk/report
+4) eliminate duplication of intents
+5) finally add proper UnitTests
+
