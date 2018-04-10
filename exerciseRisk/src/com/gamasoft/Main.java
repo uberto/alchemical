@@ -13,33 +13,20 @@ import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 
+import static com.gamasoft.risk.RiskCalculator.produceReport;
+
 public class Main {
 
     public static void main(String[] args){
 
         ConnectionPool.getInstance().open("dbConn");
         Printer printer = new Printer("mainPrinter", System.out);
-//        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-//        Printer printer = new Printer("mainPrinter", byteArrayOutputStream);
 
         produceReport("Bud Fox", "LDN", printer);
         produceReport("Gordon Gekko", "NY", printer);
 
     }
 
-    public static void produceReport(String client, String market, Printer printer) {
-        RiskCalculator calc = new RiskCalculator();
-        Portfolio pf = calc.getPortfolio(client);
-        RiskResponse r = calc.calculateValueAtRisk(client, market, pf);
-        double pv = calc.calculatePresentValue(client, market);
 
-
-        ClientData cl = new ClientData(client, pf);
-        RiskData riskData = new RiskData(cl, r, pv);
-        Report rep = new Report(printer, riskData);
-
-        printer.printReport(rep);
-
-    }
 }
 
