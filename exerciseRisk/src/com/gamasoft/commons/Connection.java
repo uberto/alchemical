@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Random;
 
 public class Connection {
-    private Random random = new Random();
+    private Random random = new Random(1234);
     private String clientId;
 
     public StockExchange fetchExchangeData(String market) {

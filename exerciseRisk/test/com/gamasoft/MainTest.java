@@ -34,8 +34,8 @@ public class MainTest {
                 "| GBP          |\n" +
                 "| trades: 4    |\n" +
                 "| Risk: 0.444  |\n" +
-                "| Pv: 226.294  |\n" +
-                "+--------------+", byteArrayOutputStream.toString());
+                "| Pv: 226.031  |\n" +
+                "+--------------+\n", byteArrayOutputStream.toString());
     }
 
     @Test
@@ -49,8 +49,8 @@ public class MainTest {
                 "| GBP         |\n" +
                 "| trades: 5   |\n" +
                 "| Risk: 0.556 |\n" +
-                "| Pv: 275.653 |\n" +
-                "+-------------+", byteArrayOutputStream.toString());
+                "| Pv: 278.070 |\n" +
+                "+-------------+\n", byteArrayOutputStream.toString());
     }
 
 }
