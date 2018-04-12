@@ -21,7 +21,7 @@ public class RiskCalculator {
     }
 
 
-    public RiskResponse calculateValueAtRisk(String client, String market, Portfolio pf){
+    private RiskResponse calculateValueAtRisk(String client, String market, Portfolio pf){
 
         Connection conn = connHelper.connect(client, ConnectionPool.getInstance());
 
@@ -51,7 +51,7 @@ public class RiskCalculator {
     }
 
 
-    public Portfolio getPortfolio(String clientName) {
+    private Portfolio getPortfolio(String clientName) {
         Connection conn = connHelper.connect(clientName, ConnectionPool.getInstance());
 
         List<Trade> trades =conn.fetchTrades();
@@ -60,7 +60,7 @@ public class RiskCalculator {
     }
 
 
-    public double calculatePresentValue(String clientName, String market) {
+    private double calculatePresentValue(String clientName, String market) {
 
         Connection conn = connHelper.connect(clientName, ConnectionPool.getInstance());
 

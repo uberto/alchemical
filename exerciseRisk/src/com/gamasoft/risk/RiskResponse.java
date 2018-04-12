@@ -1,6 +1,5 @@
 package com.gamasoft.risk;
 
-import com.gamasoft.risk.CalcResult;
 import com.gamasoft.markets.StockExchange;
 
 public class RiskResponse {
